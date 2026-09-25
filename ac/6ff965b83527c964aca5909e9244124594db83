@@ -1,0 +1,91 @@
+Dockerfile
+  s_78c35f32186db5::t_5d1aa8d8eb6434 2-5,10-11,13-16
+.env.example
+  s_78c35f32186db5::t_22b14725428fa6 1-4,6-9
+requirements-laya.txt
+  s_78c35f32186db5::t_a8ac2043c0a108 1-4
+seems/__main__.py
+  s_78c35f32186db5::t_8c886ede0963bf 7,40,50,53-65
+  s_e6c21323926c1f::t_8b9a3b80892bdc 66
+tools/live_check.py
+  s_78c35f32186db5::t_95735e80c85853 20,32,35
+  s_e6c21323926c1f::t_f23e3352985b9c 1,5
+seems/__init__.py
+  s_78c35f32186db5::t_0d91b1e6121c11 21
+  s_e6c21323926c1f::t_599ec61e93a1a9 11
+VERIFICATION.md
+  s_78c35f32186db5::t_b0128ec0b95da4 6,11,14-15,17,19-20,23-39,41-48,50-52,54,56-80,82-83
+  s_78c35f32186db5::t_442acd82fa73ce 3-5
+tools/laya_server.py
+  s_78c35f32186db5::t_3888d978ea4352 1-13,15-20,23-36,41-92
+  s_78c35f32186db5::t_ae80af728bfef7 14,21-22,37-40
+compose.yaml
+  s_78c35f32186db5::t_8d46a0e06a48b1 1,12-14,21-38
+seems/client.py
+  s_78c35f32186db5::t_1a348ec6c7e87a 1-18,29-32,35-36,43-46,48-50,52-55,59-60,62-65,89-90,108-110,131-134,136-147
+  s_78c35f32186db5::t_dc4d47c9597fa7 66-67,69,71,77,80,84,86
+  s_78c35f32186db5::t_a54d2df279dc19 24,98-107,114
+  s_78c35f32186db5::t_24f9c75c62ccc0 91-97,112-113,115-128
+  s_78c35f32186db5::t_d63d944bdb5c2d 129-130
+README.md
+  s_78c35f32186db5::t_1a19e48f67466c 140-141,143-152
+  s_78c35f32186db5::t_1302148ae4eab2 1,3-12,22,25-42,46-47,50,52,55-57,60-62,67-79,82,85,87,91,94-96,105,108-113,115-139,142,153-155,159-166,168-170,181,183,187-200
+BRIEF.md
+  s_78c35f32186db5::t_a40d0dbbe019f0 1-2
+LANGUAGE.md
+  s_78c35f32186db5::t_2e2dbdb2a13b9f 9,28,35,49,57,103,111,119,125,139,168-169,174,177-178
+app/desk.seems
+  s_78c35f32186db5::t_af2615354e644a 38,52,95
+app/server.py
+  s_78c35f32186db5::t_f3a58095d7029c 21,36,40,115
+app/static/app.js
+  s_78c35f32186db5::t_e9ce9362c045d5 149,217,285-286,304
+app/static/desk.html
+  s_78c35f32186db5::t_70063f9e6bc9c4 27
+app/static/desk.js
+  s_78c35f32186db5::t_70c73f7603cb97 89-90
+app/static/index.html
+  s_78c35f32186db5::t_1e0221311b104d 11,24,37,63,71,120,125
+app/static/trace.js
+  s_78c35f32186db5::t_b4672c9c30774d 75
+docs/index.html
+  s_78c35f32186db5::t_a218884d533e0d 7,87-88,119,137,145,154,157,160,196,211,233,237,243,251,278-279,284,287-288,297-301,303,305,307,312
+seems/runtime.py
+  s_78c35f32186db5::t_d40da737a9c30e 8,32,36,49,109,320,342,490,518,616,696,847,1109,1121,1130,1230
+seems/testing.py
+  s_78c35f32186db5::t_569382359c93b8 1,3,26,36
+seems/translator.py
+  s_78c35f32186db5::t_7a069303c6d3a2 671
+tests/conftest.py
+  s_78c35f32186db5::t_36ea9a442872ca 10,14,45,48
+tests/test_language.py
+  s_78c35f32186db5::t_ddf837ddec6c8c 1,12,31,45,54,65-66,76,85,88,94,97,105,108,113,116,130,156,174,188,191-192,208,219-220,234,243,250,263,278,284,287,293,296,310,320,351,364,367-368,373,401,412,415,428,431,440,447,458
+tests/test_server.py
+  s_78c35f32186db5::t_22793fdebfe75a 10,62,70
+tools/guide_source.html
+  s_78c35f32186db5::t_2dda4342232750 7,87-88,121,143,153,164,167,170,210,227,251,255,261,269,304-305,310,313-314,323-324,326-328,330,333,335,340
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ac6ff965b83527c964aca5909e9244124594db83",
+  "prompts": {},
+  "sessions": {
+    "s_78c35f32186db5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d61c-ab1a-717f-a7df-96989fcdc1f9",
+        "model": "glm-5.3-flash"
+      },
+      "human_author": "Eric Ma <ericmajinglong@gmail.com>"
+    },
+    "s_e6c21323926c1f": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0c699-3fa3-7204-997b-91a0e8b1fadc",
+        "model": "glm-5.3-flash"
+      },
+      "human_author": "Eric Ma <ericmajinglong@gmail.com>"
+    }
+  }
+}

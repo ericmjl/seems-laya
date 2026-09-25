@@ -1,0 +1,49 @@
+seems/__init__.py
+  s_78c35f32186db5::t_d1dd04fc20bc4c 12,18-27,31
+pyproject.toml
+  s_78c35f32186db5::t_6a2050b55fae90 50
+  s_78c35f32186db5::t_10e4161a781d56 44-48
+seems/__main__.py
+  s_78c35f32186db5::t_42fcb66cffa5c4 72-74
+  s_78c35f32186db5::t_7b62458b45b756 51,59-71,75-77
+  s_78c35f32186db5::t_e8d66fc1d46894 78
+seems-laya.pth
+  s_78c35f32186db5::t_18d3cbe765b3db 1
+README.md
+  s_78c35f32186db5::t_92b2cded6608fd 82-118
+notebooks/examples/triage.py
+  s_78c35f32186db5::t_c10b960fcedcec 1-25
+seems/importer.py
+  s_78c35f32186db5::t_2ecb6a66f7b4e4 84-100
+  s_78c35f32186db5::t_35ba8dcfa7729a 5-11,28,31-32,35-38,62-68,76,129,134-138,140-142
+  s_78c35f32186db5::t_531f3ab08c2807 70-75,101-102,104,110-111
+  s_78c35f32186db5::t_53252343bb652b 33-34
+  s_78c35f32186db5::t_1f74a2ca8e761b 21-26,77-82,107-109,112
+  s_78c35f32186db5::t_90a04d31ee104c 69,105-106
+  s_78c35f32186db5::t_d33fddbf7ed430 132-133,139,143-156,158-159,162-163,167,170,173,175
+  s_78c35f32186db5::t_986e531696912a 103,113-127
+  s_78c35f32186db5::t_2bc54019242a5c 83
+  s_78c35f32186db5::t_cf17005ffb6bec 128
+notebooks/seems_laya_tour.py
+  s_78c35f32186db5::t_361309613cc198 1-230
+seems/_startup.py
+  s_78c35f32186db5::t_396f0f3c0641df 1-20
+tests/test_importer.py
+  s_78c35f32186db5::t_f34ed6e3039b1e 1-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "fb3f220f29c2d1eab53a4921cca64816c63c7502",
+  "prompts": {},
+  "sessions": {
+    "s_78c35f32186db5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d61c-ab1a-717f-a7df-96989fcdc1f9",
+        "model": "glm-5.3-flash"
+      },
+      "human_author": "Eric Ma <ericmajinglong@gmail.com>"
+    }
+  }
+}

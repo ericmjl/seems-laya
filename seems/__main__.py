@@ -48,7 +48,21 @@ def main(argv=None):
     check = sub.add_parser("check", help="check syntax only")
     check.add_argument("file")
     sub.add_parser("preload", help="load the Laya checkpoint now (it downloads on first use)")
+    serve = sub.add_parser("serve", help="serve Laya over HTTP, the LAYA_URL endpoint (needs the laya package)")
+    serve.add_argument("--host", default="127.0.0.1")
+    serve.add_argument("--port", type=int, default=8000)
+    serve.add_argument("--model", default=None, help="default checkpoint: english | multilingual | typed-decisions")
+    serve.add_argument("--device", default=None, help="torch device, for example mps or cuda")
     options = parser.parse_args(argv)
+
+    if options.command == "serve":
+        from .serve import main as serve_main
+        extra = []
+        if options.model:
+            extra += ["--model", options.model]
+        if options.device:
+            extra += ["--device", options.device]
+        return serve_main(["--host", options.host, "--port", str(options.port), *extra])
 
     if options.command == "preload":
         from .client import LayaClient

@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "seems-laya"
+version = "0.1.0"
+description = "Seems: Python, plus judgment. A Python superset whose plain-English conditions are answered by Laya, the open-weight decision model."
+readme = "README.md"
+requires-python = ">=3.10"
+# No license field yet: upstream kavehmz/seems-lang has no LICENSE file, so this
+# distribution is not published to PyPI until that is settled. See README.md.
+authors = [{ name = "Eric Ma" }, { name = "kavehmz (upstream seems-lang)" }]
+keywords = ["seems", "laya", "jev", "decision-model", "judgment", "dsl", "python-superset"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Compilers",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []  # the language itself needs only the standard library
+
+[project.optional-dependencies]
+# Judge judgments in-process: the open-weight Laya decision model.
+laya = ["laya>=0.3.20"]
+# Run the test suite (the fake judge needs pytest; example 05 needs feedparser).
+test = ["pytest>=8", "feedparser>=6.0,<7"]
+
+[project.scripts]
+seems = "seems.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/ericmjl/seems-laya"
+Upstream = "https://github.com/kavehmz/seems-lang"
+"Laya model" = "https://github.com/NandhaKishorM/laya"
+
+[tool.hatch.build.targets.wheel]
+packages = ["seems"]
+
+[tool.hatch.build.targets.sdist]
+include = ["seems", "tests", "examples", "README.md", "VERIFICATION.md", "LANGUAGE.md"]

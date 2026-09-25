@@ -41,10 +41,52 @@ whole swap lives.
 - **The brief the project started from:** `BRIEF.md` (upstream's; kept for history).
 - **Upstream's measured results with Jev:** [VERIFICATION.md in kavehmz/seems-lang](https://github.com/kavehmz/seems-lang/blob/main/VERIFICATION.md).
 
-## Run it
+## Install
+
+The language is a normal pip package. In any Python 3.10+ environment:
+
+```sh
+pip install seems-laya            # the language; stdlib only, talks to LAYA_URL if set
+pip install "seems-laya[laya]"    # + the open-weight judge, in-process
+```
+
+Then write a program:
+
+```python
+# triage.seems
+import seems
+
+if ticket.amount > 500 and ticket.text asks for a refund:
+    queue = "manager"
+else:
+    queue = "support"
+unsure:
+    queue = "human review"
+```
+
+and run or import it like any Python:
+
+```sh
+seems run triage.seems            # or: python -m seems run triage.seems
+seems translate triage.seems      # the Python it becomes, for editors and linters
+seems check triage.seems
+seems preload                     # download the checkpoint before the first judgment
+seems serve --host 0.0.0.0        # the LAYA_URL endpoint, e.g. on a GPU box
+```
+
+```python
+import seems; seems.install()     # then .seems files import like modules:
+import triage                     # triage.seems
+```
+
+The first judgment loads the checkpoint (~1.7 GB into `~/.cache/huggingface`, once);
+after that everything is local. Without the `[laya]` extra, set `LAYA_URL` to a `seems
+serve` endpoint (this machine or elsewhere) and the language stays stdlib-only.
+
+## Run the playground (Docker)
 
 Everything runs in containers. Nothing is installed on the host. You need Docker (or
-Podman with `docker compose`). There is no key to configure.
+Podman with `docker compose`); there is no API key, because Laya runs next to the app.
 
 ```sh
 cp .env.example .env
@@ -185,7 +227,8 @@ docker compose run --rm app python tools/live_check.py
 | `app/server.py`, `app/static/` | Playground API and pages. |
 | `examples/` | Six programs and their data. |
 | `docs/index.html` | The language guide page, built from `tools/guide_source.html`. |
-| `tools/laya_server.py` | Small HTTP wrapper around a local Laya Router. |
+| `seems/serve.py` | `seems serve`: small HTTP wrapper around a local Laya Router (the `LAYA_URL` endpoint). |
+| `tools/laya_server.py` | Compat wrapper: `python tools/laya_server.py` == `python -m seems serve`. |
 | `tests/` | 72 tests with a fake Laya. `tools/live_check.py` uses the real one. |
 
 ## Acknowledgements

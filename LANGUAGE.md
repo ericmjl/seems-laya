@@ -6,7 +6,7 @@ This page covers only what Seems adds.
 ## 1. One rule
 
 - Python operators are **exact**. They run in code: `>`, `==`, `in`, `is`, `len(...)`.
-- A **judgment verb** sends a question to TypeSafe Jev and gets a probability back.
+- A **judgment verb** sends a question to Laya and gets a probability back.
 
 ```python
 if review.stars >= 4 and review.text seems happy:
@@ -25,14 +25,14 @@ item.title seems like clickbait
 log_line suggests a memory leak
 ```
 
-- The value on the left is the thing Jev looks at. It is a name, an attribute, an index or a
+- The value on the left is the thing Laya looks at. It is a name, an attribute, an index or a
   call: `rows[0]["body"].strip() seems rude`. Put anything larger in brackets: `(a + b) seems long`.
 - The English runs until `and`, `or`, `if`, `else`, a comma, a closing bracket, a colon or the
   end of the line. Inside brackets it also ends at the `for` of a comprehension.
 - Put the English in quotes when it needs one of those words, an apostrophe or other
   punctuation: `text seems "rude and dismissive"`. An f-string works too:
   `text mentions f"the product {name}"`.
-- The question Jev gets is mechanical: `X asks for a refund` becomes
+- The question Laya gets is mechanical: `X asks for a refund` becomes
   *"Does this ask for a refund?"* with `X` as the state.
 
 ### Relating verbs: `value VERB value`
@@ -46,7 +46,7 @@ a means b                                  # equality by meaning. == stays exact
 reply contradicts "all sales are final"    # English goes in quotes
 ```
 
-Jev gets both values as named state and a question like *"Does `reply` contradict `policy`?"*.
+Laya gets both values as named state and a question like *"Does `reply` contradict `policy`?"*.
 
 ### What a judgment is
 
@@ -54,7 +54,7 @@ A judgment is a value. It can live in a variable, a list or a property.
 
 | Use | Result |
 | --- | --- |
-| `if j:` `bool(j)` `not j` | True or False. Raises `Unsure` when Jev is not sure. |
+| `if j:` `bool(j)` `not j` | True or False. Raises `Unsure` when Laya is not sure. |
 | `j.p` | The probability of yes, 0 to 1. Never raises. |
 | `j.verdict()` | `"yes"`, `"no"` or `"unsure"`. Never raises. |
 | `j.yes` `j.no` `j.unsure` `j.sure` | Plain booleans. Never raise. |
@@ -100,7 +100,7 @@ judgment urgent: "Does this ticket need an answer within one hour?"
     no:  "a general question or feedback"
 ```
 
-| Block | Jev primitive | Call it | You get |
+| Block | Laya question type | Call it | You get |
 | --- | --- | --- | --- |
 | `kind` | Choice | `team(text)` | a pick: `.name`, `.top`, `.p("billing")`, `.probabilities`, `.confidence`, `.sure`, `.is_one_of(a, b)` |
 | `scale` | Score | `anger(text)` | a rating: `.level`, `.score`, `.normalized`, `.probabilities`, `.confidence`, `float(r)` |
@@ -108,7 +108,7 @@ judgment urgent: "Does this ticket need an answer within one hour?"
 
 - A description is optional: a bare `other` is allowed. A name with spaces goes in quotes.
 - A kind needs 2 to 255 entries. A scale needs 2 to 10 levels, lowest first.
-- Add a "none of these" entry when nothing may fit. Jev can only pick what you list.
+- Add a "none of these" entry when nothing may fit. Laya can only pick what you list.
 - Write scale levels as situations ("insults or threats"), not degrees ("very angry").
 - Comparisons are three-valued, like judgments:
   - `team(text) == team.billing` uses the probability of `billing`.
@@ -116,13 +116,13 @@ judgment urgent: "Does this ticket need an answer within one hour?"
   - `match team(text):` with `case team.billing:` works.
 - One word after a describing verb may name a judgment: `text seems urgent` uses the declared
   question and criteria. Any other word is plain English.
-- To give Jev several named parts, use keywords: `team(text=ticket.text, policy=policy)`.
+- To give Laya several named parts, use keywords: `team(text=ticket.text, policy=policy)`.
   The question can then point at a part with backticks: ``"Does `policy` allow this?"``.
 - `seems.ask("Is this a greeting?", text)` is a one-off yes/no judgment with your own question.
 
 ## 5. Speed
 
-One round trip to Jev takes most of a second. The language keeps round trips few.
+A round trip to a hosted decision API takes most of a second; Laya answers a whole batch in one forward pass. The language keeps round trips few either way.
 
 - **Lazy.** Creating a judgment sends nothing. The first time the program needs any answer,
   everything waiting is sent. Questions about the same value share one request. Other requests
@@ -136,7 +136,7 @@ One round trip to Jev takes most of a second. The language keeps round trips few
 - **if / elif.** The judgments of the later branches travel with the first one. Answers for
   branches that are not reached are ignored. The playground marks them "asked ahead".
 - **Exact first.** In `amount > 500 and text asks for a refund`, a false `amount > 500` means
-  Jev is never called.
+  Laya is never called.
 - **No surprises.** A part of a condition that calls a function (`and charge(card)`) never runs
   early. It waits for the judgments before it, as in Python.
 - **Loops.** A plain `for` loop asks round after round. For independent items use either form:
@@ -165,16 +165,16 @@ seems.stats()            # totals: judgments, requests, tokens, cost
 ```
 
 - A `.seems` module gets two names for free: `Unsure` and the hidden runtime `__seems__`.
-- For tests, `seems.testing.FakeJev` stands in for the API. See `tests/conftest.py`.
-- Settings come from the environment: `TYPESAFE_API_KEY` (or `TYPESAFE_API`), `TYPESAFE_MODEL`
+- For tests, `seems.testing.FakeLaya` stands in for the model. See `tests/conftest.py`.
+- Settings come from the environment: `LAYA_URL` (serve the model over HTTP) and `LAYA_MODEL`
   (default `jev-latest`; pin `jev-1.13.0` to keep tuned levels stable), `SEEMS_CACHE`, `SEEMS_TRACE`.
 
 ## 7. Keep in code
 
-The TypeSafe docs list what Jev is weak at. Seems does not hide that.
+The Laya model card lists what it is weak at. Seems does not hide that.
 
 - Math, counting, number and date comparisons: use Python.
-- Text generation: Jev does not write. Use it to choose, not to produce.
-- Jev reads literally. Write the exact condition. Put edge cases in `yes:` and `no:` criteria.
+- Text generation: Laya does not write. Use it to choose, not to produce.
+- Laya reads literally. Write the exact condition. Put edge cases in `yes:` and `no:` criteria.
 - Send only what the question needs. A judgment's state is just the value on its left.
 - The certainty level is a policy choice. Test it on your own data before trusting it.

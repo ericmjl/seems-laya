@@ -1,4 +1,4 @@
-"""End-to-end: Seems source -> translator -> runtime, with a fake Jev."""
+"""End-to-end: Seems source -> translator -> runtime, with a fake Laya."""
 import json
 import os
 import subprocess
@@ -9,7 +9,7 @@ import pytest
 
 import seems
 from conftest import run
-from seems.testing import FakeJev, choice, noul, score
+from seems.testing import FakeLaya, choice, noul, score
 
 DECLS = '''
 kind team: "Which team should handle this?"
@@ -28,7 +28,7 @@ judgment urgent: "Does this need an answer within one hour?"
 '''
 
 
-def test_yes_no_and_unsure_branches(jev):
+def test_yes_no_and_unsure_branches(judge):
     scope = run('''
         def mood(text):
             if text seems angry:
@@ -42,7 +42,7 @@ def test_yes_no_and_unsure_branches(jev):
     assert scope["results"] == ["angry", "fine", "unsure"]
 
 
-def test_unhandled_unsure_raises(jev):
+def test_unhandled_unsure_raises(judge):
     with pytest.raises(seems.Unsure) as err:
         run('''
             if "hmm" seems angry:
@@ -51,7 +51,7 @@ def test_unhandled_unsure_raises(jev):
     assert "0.50" in str(err.value) and "unsure:" in str(err.value)
 
 
-def test_unsure_can_be_caught_like_any_exception(jev):
+def test_unsure_can_be_caught_like_any_exception(judge):
     scope = run('''
         try:
             flag = bool("hmm" seems angry)
@@ -62,8 +62,8 @@ def test_unsure_can_be_caught_like_any_exception(jev):
     assert scope["flag"] == "caught" and scope["p"] == 0.5
 
 
-def test_certainty_moves_the_bar(jev):
-    jev.answer = lambda state, q: noul(0.8)
+def test_certainty_moves_the_bar(judge):
+    judge.answer = lambda state, q: noul(0.8)
     scope = run('''
         import seems
         a = ("x" seems angry).verdict()
@@ -73,7 +73,7 @@ def test_certainty_moves_the_bar(jev):
     assert (scope["a"], scope["b"]) == ("yes", "unsure")
 
 
-def test_exact_no_never_calls_jev(jev):
+def test_exact_no_never_calls_judge(judge):
     scope = run('''
         amount = 10
         text = "please refund me"
@@ -82,19 +82,19 @@ def test_exact_no_never_calls_jev(jev):
             hit = True
     ''')
     assert scope["hit"] is False
-    assert jev.requests == []
+    assert judge.requests == []
 
 
-def test_exact_no_after_a_judgment_cancels_the_request(jev):
+def test_exact_no_after_a_judgment_cancels_the_request(judge):
     run('''
         amount = 10
         if "refund please" asks for a refund and amount > 500:
             pass
     ''')
-    assert jev.requests == []
+    assert judge.requests == []
 
 
-def test_judgments_in_one_condition_share_a_request(jev):
+def test_judgments_in_one_condition_share_a_request(judge):
     scope = run('''
         text = "I am furious, refund me"
         ok = False
@@ -102,18 +102,18 @@ def test_judgments_in_one_condition_share_a_request(jev):
             ok = True
     ''')
     assert scope["ok"] is True
-    assert len(jev.requests) == 1 and len(jev.requests[0]["questions"]) == 2
+    assert len(judge.requests) == 1 and len(judge.requests[0]["questions"]) == 2
 
 
-def test_different_states_go_out_side_by_side(jev):
+def test_different_states_go_out_side_by_side(judge):
     scope = run('''
         a, b = "I am furious", "refund please"
         ok = bool(a seems angry and b asks for a refund)
     ''')
-    assert len(jev.requests) == 2  # two states, sent together in one round
+    assert len(judge.requests) == 2  # two states, sent together in one round
 
 
-def test_side_effects_wait_for_the_judgment(jev):
+def test_side_effects_wait_for_the_judgment(judge):
     scope = run('''
         calls = []
         def charge():
@@ -127,7 +127,7 @@ def test_side_effects_wait_for_the_judgment(jev):
     assert scope["calls"] == [1]
 
 
-def test_three_valued_logic(jev):
+def test_three_valued_logic(judge):
     scope = run('''
         r = {}
         r["no_and_unsure"] = "no"
@@ -153,7 +153,7 @@ def test_three_valued_logic(jev):
                           "yes_and_unsure": "unsure", "not_no": "yes"}
 
 
-def test_elif_is_skipped_once_the_chain_is_unsure(jev):
+def test_elif_is_skipped_once_the_chain_is_unsure(judge):
     scope = run('''
         seen = []
         def note():
@@ -171,7 +171,7 @@ def test_elif_is_skipped_once_the_chain_is_unsure(jev):
     assert scope["r"] == "unsure" and scope["seen"] == []
 
 
-def test_lazy_values_are_sent_together(jev):
+def test_lazy_values_are_sent_together(judge):
     scope = run(DECLS + '''
 texts = ["billing: I am furious", "technical: hello", "other: refund"]
 owners = [team(t) for t in texts]
@@ -185,11 +185,11 @@ refunds = [bool(f) for f in flags]
     assert scope["levels"] == ["furious", "calm", "calm"]
     assert scope["refunds"] == [False, False, True]
     # three texts -> three requests, each with all three questions about that text
-    assert len(jev.requests) == 3 and all(len(r["questions"]) == 3 for r in jev.requests)
+    assert len(judge.requests) == 3 and all(len(r["questions"]) == 3 for r in judge.requests)
 
 
-def test_kind_compares_with_three_values(jev):
-    jev.answer = lambda s, q: choice({"billing": 0.55, "technical": 0.40, "other": 0.05})
+def test_kind_compares_with_three_values(judge):
+    judge.answer = lambda s, q: choice({"billing": 0.55, "technical": 0.40, "other": 0.05})
     scope = run(DECLS + '''
 pick = team("x")
 top, sure = pick.name, pick.sure
@@ -205,7 +205,7 @@ either = bool(pick.is_one_of(team.billing, team.technical))
     assert scope["definitely_not"] is True and scope["either"] is True
 
 
-def test_match_statement_on_a_kind(jev):
+def test_match_statement_on_a_kind(judge):
     scope = run(DECLS + '''
 match team("there is a bug, technical"):
     case team.billing:
@@ -216,8 +216,8 @@ match team("there is a bug, technical"):
     assert scope["r"] == "t"
 
 
-def test_scale_compares_with_levels(jev):
-    jev.answer = lambda s, q: score([0.05, 0.15, 0.80])
+def test_scale_compares_with_levels(judge):
+    judge.answer = lambda s, q: score([0.05, 0.15, 0.80])
     scope = run(DECLS + '''
 mood = anger("x")
 a = bool(mood >= anger.annoyed)      # 0.95
@@ -231,7 +231,7 @@ f = round(mood.normalized, 3)
     assert scope["f"] == 0.875
 
 
-def test_named_judgment_is_used_by_seems(jev):
+def test_named_judgment_is_used_by_seems(judge):
     scope = run(DECLS + '''
 class Ticket:
     def __init__(self, text): self.text = text
@@ -240,14 +240,14 @@ a = bool(ticket.text seems urgent)
 b = bool(urgent("just a question"))
 ''')
     assert scope["a"] is True and scope["b"] is False
-    sent = jev.requests[0]
+    sent = judge.requests[0]
     assert sent["state"] == "total outage since 9am"
     question = list(sent["questions"].values())[0]
     assert question["instructions"] == "Does this need an answer within one hour?"
     assert question["criteria"] == {"true": "outage, money lost", "false": "can wait a day"}
 
 
-def test_questions_follow_the_docs_shape(jev):
+def test_questions_follow_the_docs_shape(judge):
     run(DECLS + '''
 class T: pass
 ticket = T(); ticket.text = "refund"; policy = "Refunds within 30 days"
@@ -260,7 +260,7 @@ e = anger(text=ticket.text, policy=policy)
 seems_flush = __seems__.flush()
 ''')
     by_type = {}
-    for request in jev.requests:
+    for request in judge.requests:
         for q in request["questions"].values():
             by_type.setdefault(q["type"], []).append((request["state"], q))
     nouls = {q["instructions"]: state for state, q in by_type["noul"]}
@@ -275,25 +275,25 @@ seems_flush = __seems__.flush()
     assert q["criteria"] == ["polite", "complains, stays civil", "insults or threats"]
 
 
-def test_cache_makes_a_second_ask_free(jev):
+def test_cache_makes_a_second_ask_free(judge):
     seems.configure(cache=True)
     run('''
         a = bool("I am furious" seems angry)
         b = bool("I am furious" seems angry)
     ''')
-    assert jev.question_count == 1
+    assert judge.question_count == 1
 
 
-def test_disk_cache_survives_between_runs(jev, tmp_path, monkeypatch):
+def test_disk_cache_survives_between_runs(judge, tmp_path, monkeypatch):
     monkeypatch.setenv("SEEMS_CACHE", str(tmp_path / "cache.sqlite"))
     seems.configure(cache=True)
     run('a = bool("I am furious" seems angry)')
     seems.runtime._engine.memory.clear()
     run('a = bool("I am furious" seems angry)')
-    assert jev.question_count == 1
+    assert judge.question_count == 1
 
 
-def test_trace_lists_requests_and_judgments(jev):
+def test_trace_lists_requests_and_judgments(judge):
     with seems.trace() as events:
         run(DECLS + '''
 t = "billing: I am furious"
@@ -307,7 +307,7 @@ if t seems angry and team(t) == team.billing:
     assert judgment["question"] == "Does this seem angry?"
 
 
-def test_each_runs_rounds_side_by_side(jev):
+def test_each_runs_rounds_side_by_side(judge):
     scope = run('''
         import seems
         def check(text):
@@ -317,7 +317,7 @@ def test_each_runs_rounds_side_by_side(jev):
     assert scope["out"] == ["angry", "fine", "angry"]
 
 
-def test_python_features_keep_working(jev):
+def test_python_features_keep_working(judge):
     scope = run('''
         import asyncio, dataclasses, functools, re
         from collections import Counter
@@ -348,7 +348,7 @@ def test_python_features_keep_working(jev):
     assert scope["out"] == ["I AM FURIOUS"] and scope["counts"]["a"] == 2
 
 
-def test_errors_point_at_the_line_the_programmer_wrote(jev):
+def test_errors_point_at_the_line_the_programmer_wrote(judge):
     with pytest.raises(ZeroDivisionError) as err:
         run('''
             kind team: "q"
@@ -361,16 +361,16 @@ def test_errors_point_at_the_line_the_programmer_wrote(jev):
     assert tb.lineno + 1 == 6  # pytest counts from 0
 
 
-def test_api_failure_reaches_the_program(jev):
+def test_api_failure_reaches_the_program(judge):
     def boom(state, q):
         raise RuntimeError("network down")
-    jev.answer = boom
-    with pytest.raises(seems.JevError) as err:
+    judge.answer = boom
+    with pytest.raises(seems.LayaError) as err:
         run('x = bool("a" seems angry)')
     assert "network down" in str(err.value)
 
 
-def test_import_hook_and_cli(jev, tmp_path):
+def test_import_hook_and_cli(judge, tmp_path):
     (tmp_path / "rules.seems").write_text(textwrap.dedent('''
         def is_angry(text):
             return text seems angry
@@ -398,7 +398,7 @@ def test_import_hook_and_cli(jev, tmp_path):
 
 # ---- asking ahead: one round trip for a whole if/elif statement ------------- #
 
-def test_elif_judgments_travel_with_the_if(jev):
+def test_elif_judgments_travel_with_the_if(judge):
     scope = run('''
         text = "please refund me"
         if text seems angry:
@@ -409,10 +409,10 @@ def test_elif_judgments_travel_with_the_if(jev):
             r = "other"
     ''')
     assert scope["r"] == "refund"
-    assert len(jev.requests) == 1 and len(jev.requests[0]["questions"]) == 2
+    assert len(judge.requests) == 1 and len(judge.requests[0]["questions"]) == 2
 
 
-def test_ahead_judgments_are_dropped_when_an_exact_branch_wins(jev):
+def test_ahead_judgments_are_dropped_when_an_exact_branch_wins(judge):
     scope = run('''
         text, vip = "please refund me", True
         if vip:
@@ -425,10 +425,10 @@ def test_ahead_judgments_are_dropped_when_an_exact_branch_wins(jev):
         done = bool(after)
     ''')
     assert scope["r"] == "vip"
-    assert jev.question_count == 1  # only the judgment after the statement
+    assert judge.question_count == 1  # only the judgment after the statement
 
 
-def test_ahead_answers_are_used_even_without_the_cache(jev):
+def test_ahead_answers_are_used_even_without_the_cache(judge):
     with seems.trace() as events:
         scope = run('''
             text = "please refund me"
@@ -437,14 +437,14 @@ def test_ahead_answers_are_used_even_without_the_cache(jev):
             elif text asks for a refund:
                 r = 2
         ''')
-    assert scope["r"] == 2 and jev.question_count == 2 and len(jev.requests) == 1
+    assert scope["r"] == 2 and judge.question_count == 2 and len(judge.requests) == 1
     ahead = [e for e in events if e.get("ahead")]
     used = [e for e in events if e["type"] == "used"]
     assert len(ahead) == 1 and used == [{"type": "used", "id": ahead[0]["id"], "line": 5}]
     assert len([e for e in events if e["type"] == "judgment"]) == 2
 
 
-def test_statement_without_unsure_branch_still_raises(jev):
+def test_statement_without_unsure_branch_still_raises(judge):
     with pytest.raises(seems.Unsure):
         run('''
             text = "hmm"
@@ -455,7 +455,7 @@ def test_statement_without_unsure_branch_still_raises(jev):
         ''')
 
 
-def test_a_name_that_only_exists_later_does_not_break_asking_ahead(jev):
+def test_a_name_that_only_exists_later_does_not_break_asking_ahead(judge):
     scope = run('''
         text = "please refund me"
         if (n := len(text)) > 100 and text seems angry:

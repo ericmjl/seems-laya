@@ -1,3 +1,5 @@
+> Note: this is upstream's brief, kept as history. This repository is kavehmz/seems-lang with the judgment backend swapped to Laya; see README.md.
+
 # Brief: a programming language with judgment built in
 
 This is the prompt the project started from. It records what we agreed to build, not how.

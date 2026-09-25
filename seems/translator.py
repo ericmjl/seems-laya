@@ -668,7 +668,7 @@ class _Translator:
     def plan_ahead(self, chain: Chain):
         """Judgments in the `elif` conditions can be asked together with the `if`.
 
-        This is the speculative fan-out pattern from the TypeSafe docs: one round
+        This is the speculative fan-out pattern the decision-model docs recommend: one round
         trip for the whole if/elif statement. Only judgments whose operands cannot
         have side effects are asked ahead. The answers are used if that branch is
         reached and ignored otherwise.

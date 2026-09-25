@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import time
 import traceback
 
 from . import runtime
@@ -36,7 +37,7 @@ def main(argv=None):
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run", help="run a .seems program")
     run.add_argument("--trace", help="write every request and judgment to this file as JSON lines")
-    run.add_argument("--no-cache", action="store_true", help="ask Jev again even for known answers")
+    run.add_argument("--no-cache", action="store_true", help="ask Laya again even for known answers")
     run.add_argument("--sure", type=float, help="certainty level, default 0.75")
     run.add_argument("--stats", action="store_true", help="print totals at the end")
     run.add_argument("file")
@@ -46,7 +47,22 @@ def main(argv=None):
     tr.add_argument("file")
     check = sub.add_parser("check", help="check syntax only")
     check.add_argument("file")
+    sub.add_parser("preload", help="load the Laya checkpoint now (it downloads on first use)")
     options = parser.parse_args(argv)
+
+    if options.command == "preload":
+        from .client import LayaClient
+        started = time.perf_counter()
+        try:
+            answer = LayaClient().ask("preload", {
+                "q0": {"type": "noul", "instructions": "Does this sentence contain a word?"}},
+                runtime.settings.model)
+        except Exception as err:
+            sys.stderr.write(f"[seems] could not reach Laya: {err}\n")
+            return 1
+        sys.stdout.write(f"[seems] ready: model {answer.get('model')} answered in "
+                         f"{time.perf_counter() - started:.1f}s\n")
+        return 0
 
     if options.command == "run":
         if options.trace:

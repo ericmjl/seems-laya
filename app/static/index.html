@@ -8,7 +8,7 @@
 </head>
 <body>
   <header class="top">
-    <div class="brand"><b>Seems</b><span>Python, plus judgment. <em>is</em> runs in code, <em>seems</em> asks Jev.</span></div>
+    <div class="brand"><b>Seems</b><span>Python, plus judgment. <em>is</em> runs in code, <em>seems</em> asks Laya.</span></div>
     <nav class="nav"><a class="on" href="/">Playground</a><a href="/desk">Support desk app</a></nav>
     <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">checking…</span></div>
   </header>
@@ -21,7 +21,7 @@
         <div class="card-head">
           <b id="fileName">main.seems</b>
           <span class="grow"></span>
-          <span class="legend"><i class="l-verb">verb</i><i class="l-phrase">English for Jev</i><span>everything else is Python</span></span>
+          <span class="legend"><i class="l-verb">verb</i><i class="l-phrase">English for Laya</i><span>everything else is Python</span></span>
         </div>
         <div class="editor">
           <div class="gutter" id="gutter"></div>
@@ -34,7 +34,7 @@
         <div class="runbar">
           <button class="btn primary" id="run">Run</button>
           <span class="kbd">Ctrl / ⌘ + Enter</span>
-          <label class="opt" title="How sure Jev must be before a judgment counts as yes or no. Between the two bars it is unsure.">
+          <label class="opt" title="How sure Laya must be before a judgment counts as yes or no. Between the two bars it is unsure.">
             sure at <input type="range" id="sure" min="0.55" max="0.99" step="0.01" value="0.75"><output id="sureOut">0.75</output>
           </label>
           <label class="opt" title="Known answers are reused, so a second run is instant, free and gives the same result.">
@@ -60,7 +60,7 @@
         </div>
         <div class="pane on" id="pane-judgments">
           <div class="stats" id="stats"></div>
-          <div id="judgments"><div class="empty">Every judgment appears here with its probability, the exact question Jev got, and what it cost.</div></div>
+          <div id="judgments"><div class="empty">Every judgment appears here with its probability, the exact question Laya got, and how long it took.</div></div>
         </div>
         <div class="pane" id="pane-python"><div class="pycode" id="python"></div></div>
         <div class="pane" id="pane-guide">
@@ -68,7 +68,7 @@
             <p><a href="/guide" target="_blank" rel="noopener">Open the full language guide</a> in a new tab. Below is the short version.</p>
             <h3>The rule</h3>
             <p>Seems is Python with a few extra words. Every Python program is a valid Seems program, so every library works.
-              Python operators are <b>exact</b> and run in code. A <b>judgment verb</b> sends the text after it to TypeSafe Jev.</p>
+              Python operators are <b>exact</b> and run in code. A <b>judgment verb</b> sends the text after it to Laya.</p>
 <pre>if order.total &gt; 500 and ticket.text asks for a refund:
     send_to_manager(ticket)
 unsure:
@@ -117,12 +117,12 @@ if text seems urgent: ...     # one word after the verb can name a judgment</pre
               <li>A judgment is lazy. Nothing is sent until the program needs an answer.</li>
               <li>Then everything waiting goes together. Questions about the same value share one request.</li>
               <li>An <code>if / elif</code> statement asks the judgments of all its branches in one round trip.</li>
-              <li>An exact "no" skips Jev completely.</li>
+              <li>An exact "no" skips Laya completely.</li>
               <li>For loops over independent items use <code>seems.each(items, function)</code>, or build a list of judgments first.</li>
             </ul>
 
             <h3>Keep in code</h3>
-            <p>Jev judges meaning. Math, counting, dates and exact lookups stay in Python. Jev reads very literally, so write the exact condition you mean.</p>
+            <p>Laya judges meaning. Math, counting, dates and exact lookups stay in Python. Laya reads very literally, so write the exact condition you mean.</p>
           </div>
         </div>
       </div>

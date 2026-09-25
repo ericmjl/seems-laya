@@ -5,7 +5,7 @@ The generated Python calls into this module under the name ``__seems__``.
 Main ideas:
 
 * A judgment is **lazy**. Creating one sends nothing. The first time a program
-  needs any answer, everything still waiting goes to Jev together: questions
+  needs any answer, everything still waiting goes to Laya together: questions
   with the same state share one request, other requests run side by side.
 * A judgment is **three-valued**: yes, no or unsure. ``bool()`` of an unsure
   judgment raises ``Unsure``, so a program can never act on a guess by accident.
@@ -29,11 +29,11 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-from .client import JevClient, JevError
+from .client import LayaClient, LayaError
 from .translator import DESCRIBING, RELATING
 
 YES, NO, UNSURE = "yes", "no", "unsure"
-PRICE_PER_MTOK_USD = 0.042  # docs.typesafe.ai/models, input tokens; output is free
+PRICE_PER_MTOK_USD = 0.0  # self-hosted: Laya runs on your own machine, no per-token bill
 
 _PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -46,7 +46,7 @@ _PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 class _Settings:
     def __init__(self):
         self.sure = 0.75
-        self.model = os.environ.get("TYPESAFE_MODEL") or "jev-latest"
+        self.model = os.environ.get("LAYA_MODEL") or "english"
         self.workers = 8
         self.max_questions = 40
         self.client = None
@@ -106,7 +106,7 @@ class certainty:
 
 
 class Unsure(Exception):
-    """A judgment was needed as yes or no, but Jev was not sure enough."""
+    """A judgment was needed as yes or no, but Laya was not sure enough."""
 
     def __init__(self, judgment):
         self.judgment = judgment
@@ -317,7 +317,7 @@ class Lazy:
 
 
 class Judgment(_ProbTruth, Lazy):
-    """One yes/no judgment (a Jev Noul)."""
+    """One yes/no judgment (a Laya noul)."""
 
     def __init__(self, question):
         Lazy.__init__(self, question)
@@ -339,7 +339,7 @@ class Judgment(_ProbTruth, Lazy):
 
 
 # --------------------------------------------------------------------------- #
-# kind  ->  Jev Choice
+# kind  ->  a Laya choice
 # --------------------------------------------------------------------------- #
 
 
@@ -487,7 +487,7 @@ class Pick(Lazy):
 
 
 # --------------------------------------------------------------------------- #
-# scale  ->  Jev Score
+# scale  ->  a Laya score
 # --------------------------------------------------------------------------- #
 
 
@@ -515,7 +515,7 @@ class Scale(_Declared):
         super().__init__(name, question or f"How {name} is this?", entries, Level)
 
     def __call__(self, *args, **named):
-        # Jev sees the level descriptions and nothing else, so a level without a
+        # Laya sees the level descriptions and nothing else, so a level without a
         # description falls back to its name.
         criteria = [level.description or level.name for level in self._entries]
         question = _Question("score", self._question_text, criteria, _state_from(args, named), None)
@@ -613,7 +613,7 @@ class Rating(Lazy):
 
 
 # --------------------------------------------------------------------------- #
-# judgment  ->  a named Jev Noul with criteria
+# judgment  ->  a named Laya noul with criteria
 # --------------------------------------------------------------------------- #
 
 
@@ -693,7 +693,7 @@ def _state_from(args, named):
 
 
 def _label(source: str, value, fallback: str):
-    """Turn `ticket.text` into a path Jev can read. Other expressions get a plain name."""
+    """Turn `ticket.text` into a path Laya can read. Other expressions get a plain name."""
     if _PATH.match(source):
         parts = source.split(".")
         if parts[0] in ("self", "cls") and len(parts) > 1:
@@ -844,7 +844,7 @@ class Chain:
     """One `if / elif / else / unsure` statement while it runs.
 
     `ahead` holds the judgments of the later `elif` branches. They are created
-    here, before the first test, so they travel to Jev in the same round trip as
+    here, before the first test, so they travel to Laya in the same round trip as
     the `if` condition. A branch that is never reached simply ignores its answer.
 
     `strict` is for a statement without an `unsure:` branch: unsure raises Unsure.
@@ -1106,7 +1106,7 @@ class _Engine:
             self.emit(event)
 
     def send(self, keys, by_key):
-        client = settings.client or JevClient()
+        client = settings.client or LayaClient()
         first = by_key[keys[0]][0]._question
         questions = {f"q{i}": by_key[key][0]._question.payload for i, key in enumerate(keys)}
         request_id = next(self.request_ids)
@@ -1118,7 +1118,7 @@ class _Engine:
             for i, key in enumerate(keys):
                 answer = answers.get(f"q{i}")
                 if answer is None:
-                    raise JevError(f"TypeSafe did not answer question {i + 1}")
+                    raise LayaError(f"Laya did not answer question {i + 1}")
                 if settings.cache:
                     self.cache_put(key, answer)
                 for lazy in by_key[key]:
@@ -1127,7 +1127,7 @@ class _Engine:
             report.update(model=response.get("model"), input_tokens=usage.get("input_tokens", 0),
                           output_tokens=usage.get("output_tokens", 0))
         except Exception as err:  # every judgment of this request fails the same way
-            error = err if isinstance(err, JevError) else JevError(f"{type(err).__name__}: {err}")
+            error = err if isinstance(err, LayaError) else LayaError(f"{type(err).__name__}: {err}")
             for key in keys:
                 for lazy in by_key[key]:
                     lazy._error, lazy._request, lazy._done = error, request_id, True
@@ -1227,7 +1227,7 @@ def each(items, fn, workers=None):
     """Run fn(item) for every item side by side and return the results in order.
 
     Use it for loops whose rounds do not depend on each other. Each round can ask
-    its own judgments; the rounds wait for Jev at the same time.
+    its own judgments; the rounds wait for Laya at the same time.
     """
     items = list(items)
     if not items:

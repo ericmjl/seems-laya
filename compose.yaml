@@ -1,4 +1,4 @@
-name: seems
+name: seems-laya
 services:
   app:
     build: .
@@ -9,9 +9,30 @@ services:
     environment:
       PORT: "3000"
       SEEMS_CACHE: /tmp/seems-cache.sqlite
+      LAYA_URL: http://laya:8000
+    depends_on:
+      - laya
     init: true
     read_only: true
     tmpfs:
       - /tmp:size=64m,mode=1777
     cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
+
+  laya:
+    build: .
+    command: python tools/laya_server.py --host 0.0.0.0 --port 8000
+    env_file:
+      - .env
+    environment:
+      HF_HOME: /home/app/.cache/huggingface
+    volumes:
+      - hf-cache:/home/app/.cache/huggingface
+    init: true
+    tmpfs:
+      - /tmp:size=256m,mode=1777
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+volumes:
+  hf-cache:

@@ -7,7 +7,7 @@ flask = pytest.importorskip("flask")
 
 
 @pytest.fixture
-def client(jev, monkeypatch, tmp_path):
+def client(judge, monkeypatch, tmp_path):
     monkeypatch.setenv("DESK_DB", str(tmp_path / "desk.sqlite"))
     from app import server
     server.desk.DB_PATH = str(tmp_path / "desk.sqlite")
@@ -59,7 +59,7 @@ def test_run_reports_syntax_errors_without_starting_a_process(client):
     assert lines[0]["t"] == "syntax" and lines[-1] == {"t": "done", "code": 1, "ms": 0}
 
 
-def test_the_desk_is_a_seems_module_and_routes_tickets(client, jev):
+def test_the_desk_is_a_seems_module_and_routes_tickets(client, judge):
     from app import server
     assert server.desk.__file__.endswith("desk.seems")
 
@@ -67,7 +67,7 @@ def test_the_desk_is_a_seems_module_and_routes_tickets(client, jev):
     assert reply.status_code == 201
     ticket = reply.get_json()
     assert ticket["queue"] == "manager" and ticket["team"] == "billing"
-    assert len(jev.requests) == 1  # every judgment of the ticket in one request
+    assert len(judge.requests) == 1  # every judgment of the ticket in one request
 
     ticket = post(client, "/desk/api/tickets", {"text": "technical: total outage, I am furious", "amount": 0}).get_json()
     assert ticket["queue"] == "priority"

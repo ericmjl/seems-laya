@@ -7,11 +7,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import seems  # noqa: E402
 from seems import runtime  # noqa: E402
-from seems.testing import FakeJev, choice, noul, score  # noqa: E402
+from seems.testing import FakeLaya, choice, noul, score  # noqa: E402
 
 
 def default_answer(state, question):
-    """A tiny rule-based Jev: looks for marker words in the state text."""
+    """A tiny rule-based Laya: looks for marker words in the state text."""
     text = str(state).lower()
     kind = question["type"]
     if kind == "noul":
@@ -42,10 +42,10 @@ def default_answer(state, question):
 
 
 @pytest.fixture
-def jev(monkeypatch):
+def judge(monkeypatch):
     monkeypatch.delenv("SEEMS_CACHE", raising=False)
     monkeypatch.delenv("SEEMS_TRACE", raising=False)
-    fake = FakeJev(default_answer)
+    fake = FakeLaya(default_answer)
     old = (runtime.settings.client, runtime.settings.cache, runtime.settings.sure)
     seems.configure(client=fake, cache=False, sure=0.75)
     runtime.clear_cache()

@@ -1,0 +1,4 @@
+# The language itself needs only the Python standard library.
+# This file adds Laya (and its PyTorch dependencies) for running judgments in-process,
+# or for serving them to the app with tools/laya_server.py.
+laya>=0.3.20

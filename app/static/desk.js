@@ -86,8 +86,8 @@
 
     try {
       const health = await (await fetch("/api/health")).json();
-      $("statusDot").className = "dot " + (health.has_key ? "ok" : "bad");
-      $("statusText").textContent = health.has_key ? `Jev connected (${health.model})` : "No API key: set TYPESAFE_API_KEY in .env";
+      $("statusDot").className = "dot ok";
+      $("statusText").textContent = `Laya ready (${health.backend}) · ${health.model}`;
     } catch (e) { $("statusDot").className = "dot bad"; $("statusText").textContent = "server not reachable"; }
 
     const file = await (await fetch("/desk/api/source")).json();

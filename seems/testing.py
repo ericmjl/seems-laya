@@ -1,6 +1,6 @@
-"""A stand-in for Jev, for tests and offline work.
+"""A stand-in for Laya, for tests and offline work.
 
-    fake = FakeJev(lambda state, question: noul(0.9))
+    fake = FakeLaya(lambda state, question: noul(0.9))
     seems.configure(client=fake, cache=False)
 """
 from __future__ import annotations
@@ -23,7 +23,7 @@ def score(probabilities: list):
             "legend": {}}
 
 
-class FakeJev:
+class FakeLaya:
     """answer(state, question) -> one of noul(), choice(), score()."""
 
     def __init__(self, answer):
@@ -33,7 +33,7 @@ class FakeJev:
     def ask(self, state, questions, model):
         self.requests.append({"state": state, "questions": questions, "model": model})
         answers = {qid: self.answer(state, q) for qid, q in questions.items()}
-        return {"model": "fake-jev", "answers": answers,
+        return {"model": "fake-laya", "answers": answers,
                 "usage": {"input_tokens": 100, "output_tokens": 10}}
 
     @property

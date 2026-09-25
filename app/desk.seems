@@ -35,7 +35,7 @@ bp = Blueprint("desk", __name__)
 
 
 def route(text, amount):
-    """Decide which queue a ticket goes to. Code owns the rules. Jev reads the text."""
+    """Decide which queue a ticket goes to. Code owns the rules. Laya reads the text."""
     owner = team(text)
     mood = anger(text)
     wants_refund = text asks for a refund
@@ -49,7 +49,7 @@ def route(text, amount):
     else:
         queue, reason = owner.name, f"handled by the {owner.name} team"
     unsure:
-        queue, reason = "human review", "Jev was not sure, so a person decides"
+        queue, reason = "human review", "Laya was not sure, so a person decides"
 
     return {"queue": queue, "reason": reason, "team": owner.name,
             "team_p": round(owner.p(owner.top), 2), "anger": mood.level.name,
@@ -92,7 +92,7 @@ def create_ticket():
     try:
         with seems.trace() as events:
             result = route(text, amount)
-    except seems.JevError as err:
+    except seems.LayaError as err:
         return jsonify(error=str(err)), 502
     ms = round((time.perf_counter() - started) * 1000)
 

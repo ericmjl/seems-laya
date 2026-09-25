@@ -1,12 +1,19 @@
 FROM docker.io/library/python:3.13-slim
+# The app image carries Laya and its CPU-only PyTorch build so the same image can
+# serve judgments (tools/laya_server.py) or run them in-process. The CPU wheel keeps
+# the image far smaller than the CUDA default; point LAYA_URL at a GPU-served
+# laya_server elsewhere if you need the speed.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_ROOT_USER_ACTION=ignore
+    PIP_ROOT_USER_ACTION=ignore \
+    HF_HOME=/home/app/.cache/huggingface
 WORKDIR /app
-COPY requirements.txt ./
-RUN pip install -r requirements.txt && useradd --create-home --uid 10001 app
+COPY requirements.txt requirements-laya.txt ./
+RUN pip install -r requirements.txt \
+    && pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-laya.txt \
+    && useradd --create-home --uid 10001 app
 COPY --chown=app:app pytest.ini ./
 COPY --chown=app:app seems ./seems
 COPY --chown=app:app app ./app

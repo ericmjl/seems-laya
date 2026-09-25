@@ -72,7 +72,7 @@
     const request = requests && requests.get(event.request);
     if (request) meta.append(el("span", "", `request ${request.id} · ${request.questions} question${request.questions > 1 ? "s" : ""} · ${request.ms} ms`));
     const details = el("details");
-    details.append(el("summary", "", "what Jev saw"));
+    details.append(el("summary", "", "what Laya saw"));
     const question = { type: event.kind, instructions: event.question };
     if (event.criteria) question.criteria = event.criteria;
     const pre = el("pre");

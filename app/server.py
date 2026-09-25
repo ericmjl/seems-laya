@@ -18,7 +18,7 @@ from urllib.parse import urlsplit
 from flask import Flask, Response, abort, jsonify, request, send_from_directory
 
 import seems
-from seems.client import api_key_from_env
+from seems.client import mode as laya_mode
 from seems.runtime import PRICE_PER_MTOK_USD, settings
 from seems.translator import DESCRIBING, RELATING, translate
 
@@ -33,11 +33,11 @@ RUN_TIMEOUT = float(os.environ.get("SEEMS_RUN_TIMEOUT", "60"))
 ALLOWED_HOSTS = {"localhost", "127.0.0.1", "::1", *filter(None, os.environ.get("SEEMS_ALLOWED_HOSTS", "").split(","))}
 
 EXAMPLES = [
-    ("01_is_vs_seems", "is vs seems", "Exact conditions run in code. Judgments go to Jev. `unsure:` catches the rest."),
+    ("01_is_vs_seems", "is vs seems", "Exact conditions run in code. Judgments go to Laya. `unsure:` catches the rest."),
     ("02_support_triage", "Support triage", "kind, scale and judgment blocks route an inbox. Eight tickets, one round trip each."),
     ("03_unsure", "Handling unsure", "The unsure branch, the Unsure exception, and raising the bar with certainty()."),
     ("04_relations", "Comparing two values", "contradicts, answers, means: check draft replies against a policy."),
-    ("05_libraries", "With pip libraries", "feedparser reads a feed, Jev judges it, sqlite3 stores and queries the result."),
+    ("05_libraries", "With pip libraries", "feedparser reads a feed, Laya judges it, sqlite3 stores and queries the result."),
     ("06_more_python", "More Python", "Judgments inside classes, cached properties, generators, sorting and match."),
 ]
 
@@ -112,7 +112,7 @@ def guide_files(name):
 
 @app.get("/api/health")
 def health():
-    return jsonify(ok=True, has_key=bool(api_key_from_env()), model=settings.model,
+    return jsonify(ok=True, backend=laya_mode(), model=settings.model,
                    version=seems.__version__)
 
 

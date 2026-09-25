@@ -146,7 +146,7 @@
     if (!t) { stats.textContent = ""; return; }
     const cost = t.tokens * state.pricePerMtok / 1e6;
     const parts = [
-      ["judgments", t.judgments], ["unsure", t.unsure], ["requests to Jev", t.requests],
+      ["judgments", t.judgments], ["unsure", t.unsure], ["requests to Laya", t.requests],
       ["from cache", t.cached], ["input tokens", t.tokens.toLocaleString()],
       ["cost", "$" + cost.toFixed(6)],
     ];
@@ -214,7 +214,7 @@
       showStats();
       runState.textContent = message.code === 0 ? `finished in ${(message.ms / 1000).toFixed(2)} s` : `stopped with an error`;
       if (!judgments.children.length) {
-        judgments.append(el("div", "empty", "This run asked Jev nothing. Exact conditions decided everything, or the program has no judgments."));
+        judgments.append(el("div", "empty", "This run asked Laya nothing. Exact conditions decided everything, or the program has no judgments."));
       }
     }
   }
@@ -282,8 +282,8 @@
 
     try {
       const health = await (await fetch("/api/health")).json();
-      $("statusDot").className = "dot " + (health.has_key ? "ok" : "bad");
-      $("statusText").textContent = health.has_key ? `Jev connected (${health.model})` : "No API key: set TYPESAFE_API_KEY in .env";
+      $("statusDot").className = "dot ok";
+      $("statusText").textContent = `Laya ready (${health.backend}) · ${health.model}`;
       const language = await (await fetch("/api/language")).json();
       state.pricePerMtok = language.price_per_mtok_usd;
     } catch (e) {
@@ -301,7 +301,7 @@
         load(example.source, example.id + ".seems");
         resetResults(); state.totals = null; showStats();
         output.innerHTML = '<span class="hint">Press Run.</span>';
-        judgments.innerHTML = '<div class="empty">Every judgment appears here with its probability, the exact question Jev got, and what it cost.</div>';
+        judgments.innerHTML = '<div class="empty">Every judgment appears here with its probability, the exact question Laya got, and how long it took.</div>';
       });
       strip.append(button);
     });

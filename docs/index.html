@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Seems: Python, plus judgment</title>
-  <meta name="description" content="Seems is a superset of Python where a condition can be plain English, answered by TypeSafe Jev as yes, no or unsure. The language guide.">
+  <meta name="description" content="Seems is a superset of Python where a condition can be plain English, answered by Laya as yes, no or unsure. The language guide.">
   <style>
     :root {
       --bg: #f6f5f1; --panel: #ffffff; --panel-2: #faf9f6; --line: #e3e0d8; --text: #1f2328; --muted: #6b7280;
@@ -84,8 +84,8 @@
 <body>
 <header class="hero">
   <div class="hero-inner">
-    <h1>Seems <span>Python, plus judgment. <em>is</em> runs in code, <em>seems</em> asks Jev.</span></h1>
-    <p class="lead">Seems is a superset of Python. A condition can be plain English, and TypeSafe Jev answers it
+    <h1>Seems <span>Python, plus judgment. <em>is</em> runs in code, <em>seems</em> asks Laya.</span></h1>
+    <p class="lead">Seems is a superset of Python. A condition can be plain English, and Laya answers it
       with a probability. The answer is yes, no or unsure, and unsure is a real branch of <code>if</code>.
       Every Python library keeps working.</p>
     <div class="buttons">
@@ -116,7 +116,7 @@
 <h2 id="rule">1. One rule</h2>
 <div class="rule">
   <div class="card"><b>Exact</b><code>review.stars >= 4</code><p>Python operators run in code: <code>&gt;</code>, <code>==</code>, <code>in</code>, <code>len(...)</code>.</p></div>
-  <div class="card"><b>Judgment</b><code>review.text <span class="sx-verb">seems</span> <span class="sx-phrase">happy</span></code><p>A judgment verb sends a question to Jev and gets a probability back.</p></div>
+  <div class="card"><b>Judgment</b><code>review.text <span class="sx-verb">seems</span> <span class="sx-phrase">happy</span></code><p>A judgment verb sends a question to Laya and gets a probability back.</p></div>
 </div>
 <pre class="code seems"><code><span class="kw">if</span> review.stars &gt;= <span class="num">4</span> <span class="kw">and</span> review.text <span class="sx-verb">seems</span> <span class="sx-phrase">happy</span>:
     <span class="fn">thank</span>(review)</code></pre>
@@ -134,7 +134,7 @@ log_line <span class="sx-verb">suggests</span> <span class="sx-phrase">a memory 
 rows[<span class="num">0</span>][<span class="str">"body"</span>].<span class="fn">strip</span>() <span class="sx-verb">seems</span> <span class="sx-phrase">rude</span>
 (first + second) <span class="sx-verb">seems</span> <span class="sx-phrase">too long</span></code></pre>
 <ul>
-  <li>The value on the left is what Jev looks at. It can be a name, an attribute, an index or a call. Put anything larger in brackets.</li>
+  <li>The value on the left is what Laya looks at. It can be a name, an attribute, an index or a call. Put anything larger in brackets.</li>
   <li>The English runs until <code>and</code>, <code>or</code>, <code>if</code>, <code>else</code>, a comma, a closing bracket, a colon or the end of the line.
     Inside brackets it also ends at the <code>for</code> of a comprehension.</li>
   <li>Put the English in quotes when it needs one of those words, an apostrophe or other punctuation. An f-string works too.</li>
@@ -142,7 +142,7 @@ rows[<span class="num">0</span>][<span class="str">"body"</span>].<span class="f
 <pre class="code seems"><code>text <span class="sx-verb">seems</span> <span class="sx-phrase">"rude and dismissive"</span>
 text <span class="sx-verb">mentions</span> <span class="sx-phrase">f"the product {name}"</span>
 flags = [t.text <span class="sx-verb">asks</span> <span class="sx-phrase">for a refund</span> <span class="kw">for</span> t <span class="kw">in</span> tickets]</code></pre>
-<p>The question Jev gets is mechanical. <code>X asks for a refund</code> becomes <i>"Does this ask for a refund?"</i>
+<p>The question Laya gets is mechanical. <code>X asks for a refund</code> becomes <i>"Does this ask for a refund?"</i>
   with the value of <code>X</code> as the state. No model reads your source code.</p>
 
 <h3>Relating verbs: <code>value VERB value</code></h3>
@@ -151,13 +151,13 @@ flags = [t.text <span class="sx-verb">asks</span> <span class="sx-phrase">for a 
 reply <span class="sx-verb">answers</span> ticket.question
 a <span class="sx-verb">means</span> b                                  <span class="com"># equality by meaning. == stays exact</span>
 reply <span class="sx-verb">contradicts</span> <span class="str">"all sales are final"</span>    <span class="com"># English goes in quotes</span></code></pre>
-<p>Jev gets both values as named state and a question such as <i>"Does <code>reply</code> contradict <code>policy</code>?"</i></p>
+<p>Laya gets both values as named state and a question such as <i>"Does <code>reply</code> contradict <code>policy</code>?"</i></p>
 
 <h3>A judgment is a value</h3>
-<p>It can live in a variable, a list or a property, and it is only sent to Jev when the program needs its answer.</p>
+<p>It can live in a variable, a list or a property, and it is only sent to Laya when the program needs its answer.</p>
 <table>
   <tr><th>Use</th><th>Result</th></tr>
-  <tr><td><code>if j:</code> <code>bool(j)</code> <code>not j</code></td><td>True or False. Raises <code>Unsure</code> when Jev is not sure enough.</td></tr>
+  <tr><td><code>if j:</code> <code>bool(j)</code> <code>not j</code></td><td>True or False. Raises <code>Unsure</code> when Laya is not sure enough.</td></tr>
   <tr><td><code>j.p</code></td><td>The probability of yes, from 0 to 1. Never raises.</td></tr>
   <tr><td><code>j.verdict()</code></td><td><code>"yes"</code>, <code>"no"</code> or <code>"unsure"</code>. Never raises.</td></tr>
   <tr><td><code>j.yes</code> <code>j.no</code> <code>j.unsure</code> <code>j.sure</code></td><td>Plain booleans. Never raise.</td></tr>
@@ -193,7 +193,7 @@ reply <span class="sx-verb">contradicts</span> <span class="str">"all sales are 
         <span class="fn">close_account</span>()</code></pre>
 
 <h2 id="declarations">4. kind, scale, judgment</h2>
-<p>The three Jev primitives are three declarations. Each one is a block with a question and its entries.</p>
+<p>The three Laya primitives are three declarations. Each one is a block with a question and its entries.</p>
 <pre class="code seems"><code><span class="sx-keyword">kind</span> <span class="sx-name">team</span>: <span class="str">"Which team should handle this support ticket?"</span>
     <span class="sx-entry">billing</span>:   <span class="str">"payments, charges, invoices, refunds"</span>
     <span class="sx-entry">technical</span>: <span class="str">"bugs, errors, outages, integrations"</span>
@@ -208,7 +208,7 @@ reply <span class="sx-verb">contradicts</span> <span class="str">"all sales are 
     <span class="sx-entry">yes</span>: <span class="str">"an outage, lost money, or a legal deadline"</span>
     <span class="sx-entry">no</span>:  <span class="str">"a general question or feedback"</span></code></pre>
 <table>
-  <tr><th>Block</th><th>Jev primitive</th><th>Call it</th><th>You get</th></tr>
+  <tr><th>Block</th><th>Laya primitive</th><th>Call it</th><th>You get</th></tr>
   <tr><td><code>kind</code></td><td>Choice</td><td><code>team(text)</code></td><td>a pick: <code>.name</code>, <code>.top</code>, <code>.p("billing")</code>, <code>.probabilities</code>, <code>.confidence</code>, <code>.sure</code>, <code>.is_one_of(a, b)</code></td></tr>
   <tr><td><code>scale</code></td><td>Score</td><td><code>anger(text)</code></td><td>a rating: <code>.level</code>, <code>.score</code>, <code>.normalized</code>, <code>.probabilities</code>, <code>.confidence</code>, <code>float(r)</code></td></tr>
   <tr><td><code>judgment</code></td><td>Noul with criteria</td><td><code>urgent(text)</code> or <code>text seems urgent</code></td><td>a judgment</td></tr>
@@ -230,17 +230,17 @@ match <span class="fn">team</span>(ticket.text):
         bug_tracker.<span class="fn">open</span>(ticket)</code></pre>
 <ul>
   <li>A description is optional. A name with spaces goes in quotes. A kind takes 2 to 255 entries, a scale 2 to 10 levels, lowest first.</li>
-  <li>Add a "none of these" entry when nothing may fit. Jev can only pick what you list.</li>
+  <li>Add a "none of these" entry when nothing may fit. Laya can only pick what you list.</li>
   <li>Write scale levels as situations ("insults or threats"), not degrees ("very angry").</li>
   <li>Comparisons are three-valued, like judgments. <code>owner == team.billing</code> uses the probability of <code>billing</code>.
     <code>mood &gt;= anger.annoyed</code> uses the probability that the level is <code>annoyed</code> or higher.</li>
-  <li>To give Jev several named parts, use keywords: <code>team(text=ticket.text, policy=policy)</code>. The question can then
+  <li>To give Laya several named parts, use keywords: <code>team(text=ticket.text, policy=policy)</code>. The question can then
     point at a part with backticks.</li>
   <li><code>seems.ask("Is this a greeting?", text)</code> is a one-off yes/no judgment with your own question.</li>
 </ul>
 
 <h2 id="speed">5. Speed</h2>
-<p>One round trip to Jev takes most of a second. The language keeps round trips few, without extra code.</p>
+<p>One round trip to Laya takes most of a second. The language keeps round trips few, without extra code.</p>
 <ul>
   <li><b>Lazy.</b> Creating a judgment sends nothing. The first time the program needs any answer, everything
     waiting is sent. Questions about the same value share one request. Other requests run side by side.</li>
@@ -248,7 +248,7 @@ match <span class="fn">team</span>(ticket.text):
   <li><b>if / elif.</b> The judgments of the later branches travel with the first one. Answers for branches
     that are not reached are ignored.</li>
   <li><b>Exact first.</b> In <code>amount &gt; 500 and text asks for a refund</code>, a false <code>amount &gt; 500</code>
-    means Jev is never called.</li>
+    means Laya is never called.</li>
   <li><b>No surprises.</b> A part of a condition that calls a function never runs early. It waits for the
     judgments before it, as in Python.</li>
 </ul>
@@ -275,17 +275,17 @@ seems.<span class="fn">install</span>()                   <span class="com"># af
   <li>The translator uses Python's own tokenizer and fixed rules. Valid Python comes out byte for byte the same.
     In valid Python two plain words never stand next to each other, so <code>text seems angry</code> cannot clash with real code.</li>
   <li>Each source line becomes exactly one Python line. Tracebacks and debuggers point at the line you wrote.</li>
-  <li>For tests, <code>seems.testing.FakeJev</code> stands in for the API.</li>
-  <li>Settings come from the environment: <code>TYPESAFE_API_KEY</code>, <code>TYPESAFE_MODEL</code> (default <code>jev-latest</code>),
+  <li>For tests, <code>seems.testing.FakeLaya</code> stands in for the API.</li>
+  <li>Settings come from the environment: <code>LAYA_URL</code> (serve the model over HTTP), <code>LAYA_MODEL</code> (default <code>english</code>),
     <code>SEEMS_CACHE</code>, <code>SEEMS_TRACE</code>.</li>
 </ul>
 
 <h2 id="code">7. Keep in code</h2>
-<p>The TypeSafe docs list what Jev is weak at. Seems does not hide that.</p>
+<p>The Laya model card lists what it is weak at. Seems does not hide that.</p>
 <ul>
   <li>Math, counting, number and date comparisons: use Python.</li>
-  <li>Text generation: Jev does not write. Use it to choose, not to produce.</li>
-  <li>Jev reads literally. <code>text seems angry</code> is a loose question. When it matters, declare a
+  <li>Text generation: Laya does not write. Use it to choose, not to produce.</li>
+  <li>Laya reads literally. <code>text seems angry</code> is a loose question. When it matters, declare a
     <code>judgment</code> and put the edge cases in its <code>yes:</code> and <code>no:</code> criteria.</li>
   <li>Send only what the question needs. A judgment's state is just the value on its left.</li>
   <li>Answers move a little between identical requests, by up to 0.05 in our runs. A judgment that sits on the
@@ -294,21 +294,22 @@ seems.<span class="fn">install</span>()                   <span class="com"># af
 </ul>
 
 <h2 id="run">8. Run it</h2>
-<p>Everything runs in a container. Nothing is installed on your machine. You need Docker (or Podman) and a
-  <a href="https://typesafe.ai">TypeSafe</a> API key in <code>.env</code>.</p>
-<pre class="code sh"><code>git clone https://github.com/kavehmz/seems-lang.git
-cd seems-lang
-cp .env.example .env            # put your TYPESAFE_API_KEY in it
+<p>Everything runs in a container. Nothing is installed on your machine. You need Docker (or Podman); there is
+  no API key, because Laya runs next to the app.</p>
+<pre class="code sh"><code>git clone https://github.com/ericmjl/seems-laya.git
+cd seems-laya
+cp .env.example .env
 docker compose up --build -d    # then open http://localhost:3004
+docker compose run --rm laya python -m seems preload   # download the checkpoint once, before the first run
 docker compose run --rm app pytest</code></pre>
-<p>The playground shows every judgment with its probability, the exact question Jev got, and what it cost.
+<p>The playground shows every judgment with its probability, the exact question Laya got, and what it cost.
   The support desk page is a small Flask and SQLite service written in Seems.</p>
-<img class="shot" src="playground.jpg" alt="The Seems playground: a support triage program on the left, every Jev judgment with its probability on the right">
+<img class="shot" src="playground.jpg" alt="The Seems playground: a support triage program on the left, every Laya judgment with its probability on the right">
 </main>
 </div>
 
 <footer>
-  Seems is an experiment with TypeSafe Jev, a System One model that returns typed judgments and probabilities instead of text.
+  Seems is an experiment with Laya, a System One model that returns typed judgments and probabilities instead of text.
   Every code sample on this page is checked by the real Seems parser when the page is built.
   Source: <a href="https://github.com/kavehmz/seems-lang">github.com/kavehmz/seems-lang</a>.
 </footer>

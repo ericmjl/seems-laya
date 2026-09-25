@@ -1,0 +1,34 @@
+compose.yaml
+  s_78c35f32186db5::t_66619c73825731 24
+tools/laya_server.py
+  s_78c35f32186db5::t_69b1559ad7b440 1-3,5,7,10
+README.md
+  s_78c35f32186db5::t_adafad1b34aada 44-86,89,230-231
+pyproject.toml
+  s_78c35f32186db5::t_05902c7bd3b113 11-12
+  s_78c35f32186db5::t_78931f6469a2fe 1-10,13-45
+seems/__main__.py
+  s_78c35f32186db5::t_d49fdbd2535536 51-55,58-59
+  s_78c35f32186db5::t_fb345dd85e26c8 60-65
+  s_78c35f32186db5::t_f0c800a9f38665 66
+seems/serve.py
+  s_78c35f32186db5::t_5cc3f23ffbd48e 1-99
+.gitignore
+  s_78c35f32186db5::t_0262fa69067723 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6c9ea6f10ebdc2cd64492ca76bc9fa1b5828fd98",
+  "prompts": {},
+  "sessions": {
+    "s_78c35f32186db5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d61c-ab1a-717f-a7df-96989fcdc1f9",
+        "model": "glm-5.3-flash"
+      },
+      "human_author": "Eric Ma <ericmajinglong@gmail.com>"
+    }
+  }
+}

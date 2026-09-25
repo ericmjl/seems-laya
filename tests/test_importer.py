@@ -86,3 +86,32 @@ def test_install_py_is_idempotent():
     install_py()
     again = len([h for h in __import__("sys").path_hooks if getattr(h, "_seems_py", False)])
     assert again in (hooks, hooks + 1)
+
+
+def test_compiler_patch_enables_judgment_cells():
+    # The host compiles cell source at runtime, after the patch installed --
+    # exactly how marimo hits it (exec/compile of submitted code).
+    cell = (
+        "ticket = 'please refund my order'\n"
+        "if ticket asks for a refund:\n"
+        "    call = 'manager'\n"
+        "else:\n"
+        "    call = 'support'\n"
+        "unsure:\n"
+        "    call = 'human review'\n"
+        "print(call)\n"
+    )
+    code = (
+        "from seems._marimo_patch import install\n"
+        "install()\n"
+        "import seems\n"
+        "from seems.testing import FakeLaya, noul\n"
+        "seems.configure(client=FakeLaya(lambda state, question: noul(0.9)), cache=False)\n"
+        f"exec({cell!r})\n"
+    )
+    out = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True,
+        env={"SEEMS_AUTOLOAD": "off", "PATH": "/usr/bin:/bin"},
+    )
+    assert out.returncode == 0, out.stderr
+    assert "manager" in out.stdout

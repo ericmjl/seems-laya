@@ -55,14 +55,14 @@ def _(mo):
 
     mo.md(
         f"""
-        ## 1. The language
+    ## 1. The language
 
-        A superset of Python: a deterministic translator rewrites only the judgment lines,
-        using Python's own tokenizer, keeping line numbers exactly where you wrote them.
+    A superset of Python: a deterministic translator rewrites only the judgment lines,
+    using Python's own tokenizer, keeping line numbers exactly where you wrote them.
 
-        ```python
-        {source}
-        ```
+    ```python
+    {source}
+    ```
         """
     )
     return (source,)
@@ -141,11 +141,11 @@ def _(mo):
 
 
 @app.cell
-def _(amount_box, mo, seems, sure_bar, ticket_box):
-    program = f"""import seems
+def _(amount_box, furious, mo, seems, sure_bar, ticket_box):
+    seems.configure(sure=sure_bar.value)
 
-    ticket = {ticket_box.value!r}
-    amount = {amount_box.value!r}
+    ticket = ticket_box.value
+    amount = amount_box.value
 
     if amount > 500 and ticket asks for a refund:
         call = "manager"
@@ -155,17 +155,18 @@ def _(amount_box, mo, seems, sure_bar, ticket_box):
         call = "support"
     unsure:
         call = "human review"
-    """
 
-    seems.configure(sure=sure_bar.value)
-    scope = seems.run_source(program, "<playground>")
-    refund = seems.ask("Does the customer ask for a refund?", ticket_box.value)
-    angry = seems.ask("Does the ticket sound furious or alarming?", ticket_box.value)
+    refund = seems.ask("Does the customer ask for a refund?", ticket)
+    angry = seems.ask("Does the ticket sound furious or alarming?", ticket)
 
-    badge = {"manager": "🏁", "support": "🛠", "human review": "🙋"}[scope["call"]]
+    badge = {"manager": "\U0001F3C1", "support": "\U0001F6E0", "human review": "\U0001F64B"}[call]
     mo.md(
         f"""
-        ### {badge} `{scope['call']}`
+        ### {badge} `{call}`
+
+        This cell contains **judgment syntax directly** -- no `run_source`, no launcher.
+        marimo compiled it through the patched compiler; the `unsure:` branch is a real
+        branch of the cell.
 
         | judgment | probability | at bar `{sure_bar.value:.2f}` |
         | --- | --- | --- |
@@ -212,8 +213,9 @@ def _(mo):
     | surface | judgment syntax? | how |
     | --- | --- | --- |
     | any imported module (apps, workers, pytest) | yes, automatic | the startup hook translates on import |
+    | marimo cells | yes, in-cell | run marimo through `seems-marimo` (this notebook) |
     | `python script.py` as `__main__` | use the launcher | `seems run script.py` (CPython compiles `__main__` below the import system) |
-    | notebook cells | `seems.run_source` | notebooks compile their own cells |
+    | any other host | opt in | `from seems._marimo_patch import install; install()` |
 
     The judge is **local and open-weight**: deterministic answers, $0 marginal cost,
     data never leaves the machine. Swap checkpoints with `LAYA_MODEL`

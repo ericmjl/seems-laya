@@ -116,6 +116,13 @@ compiles `__main__` below the import system, so run those with the launcher:
 seems run triage.py           # or: python -m seems run triage.py
 ```
 
+Hosts that compile code themselves need one opt-in line. marimo is the worked example:
+run notebooks through the wrapper and cells contain judgment syntax directly, with full
+reactivity (`seems-marimo edit notebook.py`, or `python -m seems.marimo edit ...`). The
+wrapper patches the process compiler (translate judgment-marked sources before
+`compile`/`exec`, bind `__seems__` and `Unsure` as builtins) and propagates to marimo's
+kernel subprocesses; notebooks saved this way keep their judgment syntax on disk.
+
 The first judgment loads the checkpoint (~1.7 GB into `~/.cache/huggingface`, once);
 after that everything is local. Without the `[laya]` extra, set `LAYA_URL` to a `seems
 serve` endpoint (this machine or elsewhere) and the language stays stdlib-only.

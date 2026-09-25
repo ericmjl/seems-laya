@@ -32,6 +32,7 @@ test = ["pytest>=8", "feedparser>=6.0,<7"]
 
 [project.scripts]
 seems = "seems.__main__:main"
+seems-marimo = "seems.marimo:main"
 
 [project.urls]
 Homepage = "https://github.com/ericmjl/seems-laya"

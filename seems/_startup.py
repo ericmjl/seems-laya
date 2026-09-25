@@ -18,3 +18,14 @@ if os.environ.get("SEEMS_AUTOLOAD", "1").strip().lower() not in ("0", "off", "fa
         importer.install_py()
     except Exception:  # never break the interpreter that hosts us
         pass
+
+# Opt-in compiler patch for hosts that compile code themselves (marimo kernels
+# are multiprocessing-spawned children; they inherit this env var from the
+# seems-marimo wrapper and patch here, before marimo compiles any cell).
+if os.environ.get("SEEMS_COMPILE_PATCH", "") == "1":
+    try:
+        from ._marimo_patch import install as _install_compile_patch
+
+        _install_compile_patch()
+    except Exception:  # never break the interpreter that hosts us
+        pass

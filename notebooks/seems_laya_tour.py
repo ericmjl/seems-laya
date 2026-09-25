@@ -20,18 +20,78 @@ def _():
         f"""
         # Seems, judged by Laya
 
-        **Seems is Python with typed decisions built into the language.**
-        A condition can be plain English; an open-weight decision model (Laya) answers it
-        with a probability; `unsure:` is a real branch of `if`.
+        **The next cell is ordinary Python.** One of its branches is not computable
+        by Python alone.
 
-        This notebook shows the language running in a **regular Python environment**:
-        a normal venv, a normal `python`, no Docker, no API key, no bill.
-
-        Setup: seems `{seems.__version__}` (pip-installed), judge backend `{mode()}`
-        (in-process Laya on this machine), interpreter startup hook active.
+        Type a ticket, move the bar, watch which branch fires.
         """
     )
     return Path, mo, seems, subprocess, sys, translate
+
+
+@app.cell
+def _(mo):
+    ticket_box = mo.ui.text_area(
+        value="Charged twice for March, I want my money back or I cancel the plan.",
+        label="Ticket text", full_width=True,
+    )
+    amount_box = mo.ui.number(start=0, stop=5000, value=950, label="Amount ($)")
+    sure_bar = mo.ui.slider(start=0.50, stop=0.99, value=0.75, step=0.01, label="sure at")
+    mo.vstack([ticket_box, amount_box, sure_bar])
+    return amount_box, sure_bar, ticket_box
+
+
+@app.cell
+def _(amount_box, furious, mo, seems, sure_bar, ticket_box):
+    seems.configure(sure=sure_bar.value)
+
+    ticket = ticket_box.value
+    amount = amount_box.value
+
+    if amount > 500 and ticket asks for a refund:
+        call = "manager"
+    elif ticket sounds furious:
+        call = "manager"
+    else:
+        call = "support"
+    unsure:
+        call = "human review"
+
+    refund = seems.ask("Does the customer ask for a refund?", ticket)
+    angry = seems.ask("Does the ticket sound furious or alarming?", ticket)
+
+    badge = {"manager": "\U0001F3C1", "support": "\U0001F6E0", "human review": "\U0001F64B"}[call]
+    mo.md(
+        f"""
+        ### {badge} `{call}`
+
+        | judgment | probability | at bar `{sure_bar.value:.2f}` |
+        | --- | --- | --- |
+        | asks for a refund | `{refund.p:.3f}` | {refund.verdict()} |
+        | sounds furious | `{angry.p:.3f}` | {angry.verdict()} |
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ## So what just happened
+
+    - `ticket asks for a refund` and `ticket sounds furious` are **judgments**: the
+      English went to Laya, an open-weight decision model running on this machine, and
+      came back as a probability.
+    - `amount > 500` stayed exact Python. Comparisons are code's job; meaning is the
+      model's.
+    - `unsure:` is a **real branch**. When the model is not sure enough, the program
+      refuses to act on a guess and routes to a human.
+    - Deterministic and free: same words, same probability, $0.00, no data leaves your
+      machine.
+
+    The rest of the notebook takes that apart.
+    """)
+    return
 
 
 @app.cell
@@ -55,14 +115,14 @@ def _(mo):
 
     mo.md(
         f"""
-    ## 1. The language
+        ## 1. The language
 
-    A superset of Python: a deterministic translator rewrites only the judgment lines,
-    using Python's own tokenizer, keeping line numbers exactly where you wrote them.
+        A superset of Python: a deterministic translator rewrites only the judgment lines,
+        using Python's own tokenizer, keeping line numbers exactly where you wrote them.
 
-    ```python
-    {source}
-    ```
+        ```python
+        {source}
+        ```
         """
     )
     return (source,)
@@ -102,7 +162,7 @@ def _(Path, mo, subprocess, sys):
         {out.stdout.strip()}
         ```
         The `$40` ticket landed in `human review`: the model was not sure enough to act,
-        so the `unsure:` branch caught it. That is the language's whole deal.
+        so the `unsure:` branch caught it.
         """),
     ])
     return
@@ -123,58 +183,6 @@ def _(mo, sys):
 
         Anything that imports your package gets judgments: Flask apps
         (`gunicorn app:app`), workers, pytest files, notebooks.
-        """
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    ticket_box = mo.ui.text_area(
-        value="Charged twice for March, I want my money back or I cancel the plan.",
-        label="Ticket text", full_width=True,
-    )
-    amount_box = mo.ui.number(start=0, stop=5000, value=950, label="Amount ($)")
-    sure_bar = mo.ui.slider(start=0.50, stop=0.99, value=0.75, step=0.01, label="sure at")
-    mo.vstack([ticket_box, amount_box, sure_bar])
-    return amount_box, sure_bar, ticket_box
-
-
-@app.cell
-def _(amount_box, furious, mo, seems, sure_bar, ticket_box):
-    seems.configure(sure=sure_bar.value)
-
-    ticket = ticket_box.value
-    amount = amount_box.value
-
-    if amount > 500 and ticket asks for a refund:
-        call = "manager"
-    elif ticket sounds furious:
-        call = "manager"
-    else:
-        call = "support"
-    unsure:
-        call = "human review"
-
-    refund = seems.ask("Does the customer ask for a refund?", ticket)
-    angry = seems.ask("Does the ticket sound furious or alarming?", ticket)
-
-    badge = {"manager": "\U0001F3C1", "support": "\U0001F6E0", "human review": "\U0001F64B"}[call]
-    mo.md(
-        f"""
-        ### {badge} `{call}`
-
-        This cell contains **judgment syntax directly** -- no `run_source`, no launcher.
-        marimo compiled it through the patched compiler; the `unsure:` branch is a real
-        branch of the cell.
-
-        | judgment | probability | at bar `{sure_bar.value:.2f}` |
-        | --- | --- | --- |
-        | asks for a refund | `{refund.p:.3f}` | {refund.verdict()} |
-        | sounds furious | `{angry.p:.3f}` | {angry.verdict()} |
-
-        Deterministic: same question, same probability, every run. Cost: **$0.00**,
-        it ran on this machine.
         """
     )
     return

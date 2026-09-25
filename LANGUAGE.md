@@ -1,5 +1,8 @@
 # The Seems language
 
+> Seems was created by [kavehmz](https://github.com/kavehmz/seems-lang). This variant
+> answers the judgments with Laya; the language is unchanged.
+
 Seems is a superset of Python 3.13. Every Python program is a valid Seems program.
 This page covers only what Seems adds.
 

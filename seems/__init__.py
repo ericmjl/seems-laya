@@ -1,5 +1,8 @@
 """Seems: Python plus judgments.
 
+Created by kavehmz (https://github.com/kavehmz/seems-lang); this distribution
+answers the judgments with Laya instead of TypeSafe Jev.
+
     if ticket.text asks for a refund and ticket.amount > 500:
         ...
     unsure:

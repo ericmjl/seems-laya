@@ -1,15 +1,16 @@
 # Seems, judged by Laya
 
-Seems is a programming language with judgment built in. It is Python plus a few words: a
-condition can be plain English, and the decision model answers it.
+**Seems was created by [kavehmz](https://github.com/kavehmz).** It is a programming
+language with judgment built in: Python plus a few words, where a condition can be plain
+English and a decision model answers it with a probability. The language design, the
+translator, the runtime and the playground are all upstream's work
+([kavehmz/seems-lang](https://github.com/kavehmz/seems-lang)) — commit 1 of this
+repository is upstream's untouched tree.
 
-This repository is a variant of [kavehmz/seems-lang](https://github.com/kavehmz/seems-lang)
-with one thing changed: the judgments come from
+This repository is that project with one thing changed: the judgments come from
 [Laya](https://github.com/NandhaKishorM/laya) (Convai Innovations, Apache 2.0) instead of
-TypeSafe's hosted [Jev](https://typesafe.ai) API. All credit for the language, the
-translator, the runtime and the playground goes to the upstream project; this fork exists
-to ask one question: **what does the language feel like when the judge is open-weight,
-local, and free?**
+TypeSafe's hosted [Jev](https://typesafe.ai) API. It exists to ask one question: **what
+does the language feel like when the judge is open-weight, local, and free?**
 
 ```python
 if order.total > 500 and ticket.text asks for a refund:

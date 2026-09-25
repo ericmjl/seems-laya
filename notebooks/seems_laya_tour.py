@@ -4,7 +4,7 @@ __generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
     import marimo as mo
     import importlib.util
@@ -20,6 +20,9 @@ def _():
         f"""
         # Seems, judged by Laya
 
+        Seems was created by [kavehmz](https://github.com/kavehmz/seems-lang); this
+        variant answers the judgments with Laya.
+
         **The next cell is ordinary Python.** One of its branches is not computable
         by Python alone.
 
@@ -29,7 +32,7 @@ def _():
     return Path, mo, seems, subprocess, sys, translate
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     ticket_box = mo.ui.text_area(
         value="Charged twice for March, I want my money back or I cancel the plan.",
@@ -74,7 +77,7 @@ def _(amount_box, furious, mo, seems, sure_bar, ticket_box):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## So what just happened
@@ -94,7 +97,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     source = """import seems
 
@@ -115,14 +118,14 @@ def _(mo):
 
     mo.md(
         f"""
-        ## 1. The language
+    ## 1. The language
 
-        A superset of Python: a deterministic translator rewrites only the judgment lines,
-        using Python's own tokenizer, keeping line numbers exactly where you wrote them.
+    A superset of Python: a deterministic translator rewrites only the judgment lines,
+    using Python's own tokenizer, keeping line numbers exactly where you wrote them.
 
-        ```python
-        {source}
-        ```
+    ```python
+    {source}
+    ```
         """
     )
     return (source,)

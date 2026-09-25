@@ -1,0 +1,107 @@
+.dockerignore
+  s_78c35f32186db5::t_f7232c56cae838 1-7
+.env.example
+  s_78c35f32186db5::t_dde55f466ec4a6 1-5
+.gitignore
+  s_78c35f32186db5::t_15f9f8a8935101 1-11
+BRIEF.md
+  s_78c35f32186db5::t_ff2a5ea65924e5 1-43
+Dockerfile
+  s_78c35f32186db5::t_50e3f8018134bd 1-21
+LANGUAGE.md
+  s_78c35f32186db5::t_7faf2123283432 1-180
+README.md
+  s_78c35f32186db5::t_dbda83e139951b 1-147
+VERIFICATION.md
+  s_78c35f32186db5::t_73db62c0863976 1-68
+app/desk.seems
+  s_78c35f32186db5::t_5baf5c69987bd9 1-117
+app/gunicorn.conf.py
+  s_78c35f32186db5::t_a9f42156e11182 1-11
+app/server.py
+  s_78c35f32186db5::t_c122faddd34bef 1-258
+app/static/app.js
+  s_78c35f32186db5::t_f65859b4b7ccc6 1-316
+app/static/desk.html
+  s_78c35f32186db5::t_0d49405e43af79 1-50
+app/static/desk.js
+  s_78c35f32186db5::t_c5cc86ebcb6f5f 1-104
+app/static/highlight.js
+  s_78c35f32186db5::t_a5a0656fee9671 1-87
+app/static/index.html
+  s_78c35f32186db5::t_32f02de41e9dd2 1-136
+app/static/style.css
+  s_78c35f32186db5::t_ba3e4e5515ecae 1-193
+app/static/trace.js
+  s_78c35f32186db5::t_97d16eb8d97bab 1-93
+compose.yaml
+  s_78c35f32186db5::t_f96f4f8942a97b 1-17
+docs/index.html
+  s_78c35f32186db5::t_c27c992715bfbc 1-316
+examples/01_is_vs_seems.seems
+  s_78c35f32186db5::t_e522128979edbc 1-21
+examples/02_support_triage.seems
+  s_78c35f32186db5::t_528efc9f56ac89 1-60
+examples/03_unsure.seems
+  s_78c35f32186db5::t_d087b3ed370ec4 1-34
+examples/04_relations.seems
+  s_78c35f32186db5::t_87e85e038efbb2 1-33
+examples/05_libraries.seems
+  s_78c35f32186db5::t_39b9f9d7338519 1-37
+examples/06_more_python.seems
+  s_78c35f32186db5::t_96b2247197b01b 1-59
+examples/data/feed.xml
+  s_78c35f32186db5::t_d3517cda40dbf9 1-48
+examples/data/tickets.json
+  s_78c35f32186db5::t_cd244eb0f958c8 1-10
+pytest.ini
+  s_78c35f32186db5::t_381120ab4c328a 1-3
+requirements.txt
+  s_78c35f32186db5::t_7e7c1d0821f4c0 1-6
+seems/__init__.py
+  s_78c35f32186db5::t_7f8f8f1899d82a 1-25
+seems/__main__.py
+  s_78c35f32186db5::t_e7a5c42894efe5 1-93
+seems/client.py
+  s_78c35f32186db5::t_15656b80c741c7 1-68
+seems/importer.py
+  s_78c35f32186db5::t_f8f2f13a2dd0d5 1-80
+seems/runtime.py
+  s_78c35f32186db5::t_34d7b2cdfdd375 1-1238
+seems/testing.py
+  s_78c35f32186db5::t_0e3022b69d6453 1-41
+seems/translator.py
+  s_78c35f32186db5::t_b1645bb24a393a 1-822
+tests/conftest.py
+  s_78c35f32186db5::t_df77ccfe2c356c 1-60
+tests/test_guide.py
+  s_78c35f32186db5::t_355731f87e51c2 1-25
+tests/test_language.py
+  s_78c35f32186db5::t_e9f9453cdb431d 1-466
+tests/test_server.py
+  s_78c35f32186db5::t_bf46bc872152a3 1-81
+tests/test_translator.py
+  s_78c35f32186db5::t_182069df0f8bf5 1-304
+tools/build_guide.py
+  s_78c35f32186db5::t_26b9aeb4e052c6 1-107
+tools/guide_source.html
+  s_78c35f32186db5::t_d624155ddc85cd 1-344
+tools/live_check.py
+  s_78c35f32186db5::t_2c5a80d5885da8 1-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c7b62df6c7df26db92febf7b5348d71dbcb7b936",
+  "prompts": {},
+  "sessions": {
+    "s_78c35f32186db5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d61c-ab1a-717f-a7df-96989fcdc1f9",
+        "model": "glm-5.3-flash"
+      },
+      "human_author": "Eric Ma <ericmajinglong@gmail.com>"
+    }
+  }
+}

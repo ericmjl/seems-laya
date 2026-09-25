@@ -79,6 +79,43 @@ import seems; seems.install()     # then .seems files import like modules:
 import triage                     # triage.seems
 ```
 
+### Plain `.py` files too
+
+The wheel ships an interpreter startup hook (`seems-laya.pth`), so after a plain pip
+install, **ordinary `.py` files can contain judgment syntax** and any normal `import`
+runs them through the translator:
+
+```python
+# triage.py -- a regular Python file, no marker, no special extension
+if ticket.amount > 500 and ticket.text asks for a refund:
+    queue = "manager"
+else:
+    queue = "support"
+unsure:
+    queue = "human review"
+```
+
+```sh
+python -c "import triage"     # just works: exact rules in Python, judgments to Laya
+pytest                        # test files can use judgment syntax too
+```
+
+Modules without judgment syntax pass through byte for byte (the 120-standard-library-file
+test in the suite proves it), translated code is never bytecode-cached, and unrelated
+modules keep their namespaces clean. Opt out per process with `SEEMS_AUTOLOAD=off`
+(or `SEEMS_PY=off` for just the .py hook). In a checkout without the wheel's hook:
+
+```sh
+seems install-hook            # writes the .pth into this environment's site-packages
+```
+
+What the hook cannot reach: the file you hand to `python script.py` directly. CPython
+compiles `__main__` below the import system, so run those with the launcher:
+
+```sh
+seems run triage.py           # or: python -m seems run triage.py
+```
+
 The first judgment loads the checkpoint (~1.7 GB into `~/.cache/huggingface`, once);
 after that everything is local. Without the `[laya]` extra, set `LAYA_URL` to a `seems
 serve` endpoint (this machine or elsewhere) and the language stays stdlib-only.

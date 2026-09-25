@@ -48,12 +48,33 @@ def main(argv=None):
     check = sub.add_parser("check", help="check syntax only")
     check.add_argument("file")
     sub.add_parser("preload", help="load the Laya checkpoint now (it downloads on first use)")
+    sub.add_parser("install-hook", help="install the startup hook (.pth) into this environment's site-packages")
     serve = sub.add_parser("serve", help="serve Laya over HTTP, the LAYA_URL endpoint (needs the laya package)")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8000)
     serve.add_argument("--model", default=None, help="default checkpoint: english | multilingual | typed-decisions")
     serve.add_argument("--device", default=None, help="torch device, for example mps or cuda")
     options = parser.parse_args(argv)
+
+    if options.command == "install-hook":
+        import shutil
+        import sysconfig
+        import seems
+        root = os.path.dirname(os.path.abspath(seems.__file__))
+        source = os.path.join(root, os.pardir, "seems-laya.pth")
+        if not os.path.exists(source):  # installed from a wheel: the .pth ships inside the package dir
+            source = os.path.join(root, "seems-laya.pth")
+        target_dir = sysconfig.get_paths()["purelib"]
+        target = os.path.join(target_dir, "seems-laya.pth")
+        if not os.path.exists(source):
+            sys.stderr.write("could not find seems-laya.pth next to the package\n")
+            return 1
+        if os.path.exists(target) and open(target).read() == open(source).read():
+            print(f"already installed: {target}")
+            return 0
+        shutil.copyfile(source, target)
+        print(f"installed: {target}\nplain .py files can now use judgment syntax in this environment.")
+        return 0
 
     if options.command == "serve":
         from .serve import main as serve_main

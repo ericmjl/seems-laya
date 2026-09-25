@@ -41,5 +41,10 @@ Upstream = "https://github.com/kavehmz/seems-lang"
 [tool.hatch.build.targets.wheel]
 packages = ["seems"]
 
+# The startup hook must live at the ROOT of site-packages (not inside the
+# package), which for a wheel means the purelib data directory.
+[tool.hatch.build.targets.wheel.force-include]
+"seems-laya.pth" = "seems_laya-0.1.0.data/purelib/seems-laya.pth"
+
 [tool.hatch.build.targets.sdist]
-include = ["seems", "tests", "examples", "README.md", "VERIFICATION.md", "LANGUAGE.md"]
+include = ["seems", "tests", "examples", "seems-laya.pth", "README.md", "VERIFICATION.md", "LANGUAGE.md"]

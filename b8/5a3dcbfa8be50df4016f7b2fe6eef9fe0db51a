@@ -1,0 +1,35 @@
+pyproject.toml
+  s_78c35f32186db5::t_471a3b86f00ce9 35
+seems/_startup.py
+  s_78c35f32186db5::t_87f06ed2ea2564 21-31
+seems/marimo.py
+  s_78c35f32186db5::t_1f427fe9ed4210 1-26,30-39
+  s_78c35f32186db5::t_19dfa4c5d71876 27-29
+README.md
+  s_78c35f32186db5::t_19ea3a96064722 119-125
+seems/_marimo_patch.py
+  s_78c35f32186db5::t_1d55d74bfa8ef5 54,58,61-65
+  s_78c35f32186db5::t_1ec9753599cedb 57
+  s_78c35f32186db5::t_6cce8a6ef0d27b 1-25,27-50,69-70,72-74
+  s_78c35f32186db5::t_7f860b9ac27c6f 26,51-53,55-56,59-60,66-68,71,75-79
+tests/test_importer.py
+  s_78c35f32186db5::t_b518350b10404b 89-117
+notebooks/seems_laya_tour.py
+  s_78c35f32186db5::t_22756d490e043c 58,60-61,63-65,144-145,147-148,159-160,162,165-169,216,218
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b85a3dcbfa8be50df4016f7b2fe6eef9fe0db51a",
+  "prompts": {},
+  "sessions": {
+    "s_78c35f32186db5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d61c-ab1a-717f-a7df-96989fcdc1f9",
+        "model": "glm-5.3-flash"
+      },
+      "human_author": "Eric Ma <ericmajinglong@gmail.com>"
+    }
+  }
+}
